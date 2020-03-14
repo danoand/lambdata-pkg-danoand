@@ -43,16 +43,6 @@ def list2column(lst, df, new_col_name='new_col_name'):
 
 # date2year_month_day takes a dataframe column and appends
 def date2year_month_day(df, col_name):
-
-    def get_date_day(obj):
-        return obj.day
-
-    def get_date_month(obj):
-        return obj.month
-
-    def get_date_year(obj):
-        return obj.year
-
     # Validate the passed parameters
     if not isinstance(df, pd.DataFrame):
         # df is not a pandas dataframe - error
@@ -101,4 +91,12 @@ def date2year_month_day(df, col_name):
 
     return pd.concat([df, df_tmp], axis=1)
 
+def get_date_day(obj):
+    return obj.day
+
+def get_date_month(obj):
+    return obj.month
+
+def get_date_year(obj):
+    return obj.year
 
