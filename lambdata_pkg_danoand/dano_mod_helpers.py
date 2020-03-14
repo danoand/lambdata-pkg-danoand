@@ -45,6 +45,7 @@ def list2column(lst, df, new_col_name='new_col_name'):
 
     # Is there a column name of 'new_column' in the passed dataframe
     if new_col_name in df.columns:
+        # avoid a name collision with the existing 'new_column' column
         ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
         new_col_name = new_col_name + "_" + ts
 
@@ -103,16 +104,19 @@ def date2year_month_day(df, col_name):
     ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
     col_name_day = 'day'
     if col_name_day in df.columns:
+        # avoid a name collision with the existing 'day' column
         col_name_day = col_name_day + "_" + ts
 
     # Is there a column name of 'month' in the passed dataframe
     col_name_month = 'month'
     if col_name_month in df.columns:
+        # avoid a name collision with the existing 'month' column
         col_name_month = col_name_month + "_" + ts
 
     # Is there a column name of 'year' in the passed dataframe
     col_name_year = 'year'
     if col_name_year in df.columns:
+        # avoid a name collision with the existing 'year' column
         col_name_year = col_name_year + "_" + ts
 
     # Create dataframe comprised
