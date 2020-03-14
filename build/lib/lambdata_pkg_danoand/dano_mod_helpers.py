@@ -2,10 +2,19 @@
 import pandas as pd
 import datetime
 
-# list2column takes a list and appends it to a passed dataframe as a column
-
 
 def list2column(lst, df, new_col_name='new_col_name'):
+    """
+    list2column takes a list and appends it to a passed dataframe as a column
+
+    Arguments:
+    lst          -- a list to be added as a column to a passed dataframe
+    df           -- the dataframe to which the column is to added
+    new_col_name -- name of the new column
+
+    Returns:
+    pandas.DataFrame
+    """
     # Validate the passed parameters
     if not isinstance(lst, list):
         # lst is not a list - error
@@ -36,6 +45,7 @@ def list2column(lst, df, new_col_name='new_col_name'):
 
     # Is there a column name of 'new_column' in the passed dataframe
     if new_col_name in df.columns:
+        # avoid a name collision with the existing 'new_column' column
         ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
         new_col_name = new_col_name + "_" + ts
 
@@ -43,10 +53,29 @@ def list2column(lst, df, new_col_name='new_col_name'):
 
     return pd.concat([df, df_tmp], axis=1)
 
-# date2year_month_day takes a dataframe column and appends
-
 
 def date2year_month_day(df, col_name):
+    """
+    date2year_month_day takes a dataframe column and appends a year, month, and day column
+    of column cell's date value
+
+    Arguments:
+    df           -- dataframe containing a column housing a date like value
+    new_col_name -- name of the date column
+
+    Returns:
+    pandas.DataFrame
+    """
+
+    def get_date_day(obj):
+        return obj.day
+
+    def get_date_month(obj):
+        return obj.month
+
+    def get_date_year(obj):
+        return obj.year
+
     # Validate the passed parameters
     if not isinstance(df, pd.DataFrame):
         # df is not a pandas dataframe - error
@@ -75,16 +104,19 @@ def date2year_month_day(df, col_name):
     ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
     col_name_day = 'day'
     if col_name_day in df.columns:
+        # avoid a name collision with the existing 'day' column
         col_name_day = col_name_day + "_" + ts
 
     # Is there a column name of 'month' in the passed dataframe
     col_name_month = 'month'
     if col_name_month in df.columns:
+        # avoid a name collision with the existing 'month' column
         col_name_month = col_name_month + "_" + ts
 
     # Is there a column name of 'year' in the passed dataframe
     col_name_year = 'year'
     if col_name_year in df.columns:
+        # avoid a name collision with the existing 'year' column
         col_name_year = col_name_year + "_" + ts
 
     # Create dataframe comprised
@@ -94,15 +126,3 @@ def date2year_month_day(df, col_name):
         col_name_year: pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_year)})
 
     return pd.concat([df, df_tmp], axis=1)
-
-
-def get_date_day(obj):
-    return obj.day
-
-
-def get_date_month(obj):
-    return obj.month
-
-
-def get_date_year(obj):
-    return obj.year
