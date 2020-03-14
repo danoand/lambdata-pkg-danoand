@@ -2,10 +2,12 @@
 import pandas as pd
 import datetime
 
-# list2column takes a list and appends it to a passed dataframe as a column 
+# list2column takes a list and appends it to a passed dataframe as a column
+
+
 def list2column(lst, df, new_col_name='new_col_name'):
     # Validate the passed parameters
-    if not type(lst) is list:
+    if not isinstance(lst, list):
         # lst is not a list - error
         print(f'passed "list" parameter is not a Python list')
         return
@@ -42,6 +44,8 @@ def list2column(lst, df, new_col_name='new_col_name'):
     return pd.concat([df, df_tmp], axis=1)
 
 # date2year_month_day takes a dataframe column and appends
+
+
 def date2year_month_day(df, col_name):
     # Validate the passed parameters
     if not isinstance(df, pd.DataFrame):
@@ -83,7 +87,7 @@ def date2year_month_day(df, col_name):
     if col_name_year in df.columns:
         col_name_year = col_name_year + "_" + ts
 
-    # Create dataframe comprised 
+    # Create dataframe comprised
     df_tmp = pd.DataFrame({
         col_name_day: pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_day),
         col_name_month: pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_month),
@@ -91,12 +95,14 @@ def date2year_month_day(df, col_name):
 
     return pd.concat([df, df_tmp], axis=1)
 
+
 def get_date_day(obj):
     return obj.day
+
 
 def get_date_month(obj):
     return obj.month
 
+
 def get_date_year(obj):
     return obj.year
-

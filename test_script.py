@@ -1,4 +1,4 @@
-import pandas as pd 
+import pandas as pd
 
 from lambdata_pkg_danoand.dano_mod_helpers import list2column, date2year_month_day
 
