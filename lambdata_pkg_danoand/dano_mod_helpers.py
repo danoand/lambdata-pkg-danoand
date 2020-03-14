@@ -2,6 +2,7 @@
 import pandas as pd
 import datetime
 
+
 def list2column(lst, df, new_col_name='new_col_name'):
     """
     list2column takes a list and appends it to a passed dataframe as a column
@@ -50,6 +51,7 @@ def list2column(lst, df, new_col_name='new_col_name'):
     df_tmp = pd.DataFrame({new_col_name: pd.Series(lst)})
 
     return pd.concat([df, df_tmp], axis=1)
+
 
 def date2year_month_day(df, col_name):
     """
