@@ -2,10 +2,18 @@
 import pandas as pd
 import datetime
 
-# list2column takes a list and appends it to a passed dataframe as a column
-
-
 def list2column(lst, df, new_col_name='new_col_name'):
+    """
+    list2column takes a list and appends it to a passed dataframe as a column
+
+    Arguments:
+    lst          -- a list to be added as a column to a passed dataframe
+    df           -- the dataframe to which the column is to added
+    new_col_name -- name of the new column
+
+    Returns:
+    pandas.DataFrame
+    """
     # Validate the passed parameters
     if not isinstance(lst, list):
         # lst is not a list - error
@@ -43,10 +51,18 @@ def list2column(lst, df, new_col_name='new_col_name'):
 
     return pd.concat([df, df_tmp], axis=1)
 
-# date2year_month_day takes a dataframe column and appends
-
-
 def date2year_month_day(df, col_name):
+    """
+    date2year_month_day takes a dataframe column and appends a year, month, and day column
+    of column cell's date value
+
+    Arguments:
+    df           -- dataframe containing a column housing a date like value
+    new_col_name -- name of the date column
+
+    Returns:
+    pandas.DataFrame
+    """
 
     def get_date_day(obj):
         return obj.day
