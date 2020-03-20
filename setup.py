@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setup(
     name="lambdata_pkg_danoand1",
-    version="1.0",
+    version="2.0",
     author="Dan Anderson",
     author_email="danfanderson@gmail.com",
     description="For learning purposes",

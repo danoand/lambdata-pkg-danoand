@@ -3,126 +3,107 @@ import pandas as pd
 import datetime
 
 
-def list2column(lst, df, new_col_name='new_col_name'):
-    """
-    list2column takes a list and appends it to a passed dataframe as a column
+class UpdatedDataFrame(pd.DataFrame):
 
-    Arguments:
-    lst          -- a list to be added as a column to a passed dataframe
-    df           -- the dataframe to which the column is to added
-    new_col_name -- name of the new column
+    # list2column is a method on the class that adds a list to the dataframe as a column
+    def list2column(self, lst, new_col_name='new_col_name'):
+        """
+        list2column accepts a list and adds it as a column to the dataframe
 
-    Returns:
-    pandas.DataFrame
-    """
-    # Validate the passed parameters
-    if not isinstance(lst, list):
-        # lst is not a list - error
-        print(f'passed "list" parameter is not a Python list')
-        return
+        Arguments:
+        self         -- class data
+        lst          -- list to be added
+        new_col_name -- name of the new column
+        """
 
-    if not isinstance(df, pd.DataFrame):
-        # df is not a pandas dataframe - error
-        print(f'passed "list" parameter is not a Python list')
-        return
+        # Validate the passed parameters
+        if not isinstance(lst, list):
+            # lst is not a list - error
+            print(f'passed "list" parameter is not a Python list')
+            return
 
-    # Ensure we have a non-empty list and dataframe
-    if len(lst) == 0:
-        # passed list is empty
-        print(f'passed "list" is empty')
-        return
+        # Ensure we have a non-empty list and dataframe
+        if len(lst) == 0:
+            # passed list is empty
+            print(f'passed "list" is empty')
+            return
 
-    if len(df) == 0:
-        # passed dataframe is empty
-        print(f'passed "dataframe" is empty')
-        return
+        # Ensure the list and dataframe have the same length
+        if len(lst) != len(self):
+            # length of the list and dataframe are not equal
+            print(f'passed "list" parameter is not a Python list')
+            return
 
-    # Ensure the list and dataframe have the same length
-    if len(lst) != len(df):
-        # length of the list and dataframe are not equal
-        print(f'passed "list" parameter is not a Python list')
-        return
+        # Is there a column name of 'new_column' in the passed dataframe
+        if new_col_name in self.columns:
+            # avoid a name collision with the existing 'new_column' column
+            ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
+            new_col_name = new_col_name + "_" + ts
 
-    # Is there a column name of 'new_column' in the passed dataframe
-    if new_col_name in df.columns:
-        # avoid a name collision with the existing 'new_column' column
-        ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
-        new_col_name = new_col_name + "_" + ts
+        self[new_col_name] = pd.Series(lst)
 
-    df_tmp = pd.DataFrame({new_col_name: pd.Series(lst)})
+    # date2year_month_day takes a dataframe column and appends a year, month, and day column associate with that date
+    def date2year_month_day(self, col_name):
+        """
+        date2year_month_day takes a date like column in the the dataframe object and appends a year, month, and day column
 
-    return pd.concat([df, df_tmp], axis=1)
+        Arguments:
+        self         -- the object's dataframe object
+        new_col_name -- name of the date column
+        """
+
+        def get_date_day(obj):
+            return obj.day
+
+        def get_date_month(obj):
+            return obj.month
+
+        def get_date_year(obj):
+            return obj.year
+
+        if len(self) == 0:
+            # passed dataframe is empty
+            print(f'passed "dataframe" is empty')
+            return
+
+        if len(col_name) == 0:
+            # missing column name
+            print(f'"column name" is missing')
+            return
+
+        if not col_name in self.columns:
+            # column name not found in the passed dataframe
+            print(f'column name "{col_name}" not found in dataframe')
+            return
+
+        # Create a series of data time objects
+        tmp_dt_tm_srs = pd.to_datetime(
+            self[col_name], infer_datetime_format=True)
+
+        # Generate column names
+        col_name_day = col_name + '_day'
+        col_name_month = col_name + '_month'
+        col_name_year = col_name + '_year'
+
+        # Assign new day, month, year columns to the dataframe
+        self[col_name_day] = pd.to_datetime(
+            tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_day)
+        self[col_name_month] = pd.to_datetime(
+            tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_month)
+        self[col_name_year] = pd.to_datetime(
+            tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_year)
 
 
-def date2year_month_day(df, col_name):
-    """
-    date2year_month_day takes a dataframe column and appends a year, month, and day column
-    of column cell's date value
+if __name__ == "__main__":
+    # Exercise method 'list2column'
 
-    Arguments:
-    df           -- dataframe containing a column housing a date like value
-    new_col_name -- name of the date column
+    # Create a updated dataframe class
 
-    Returns:
-    pandas.DataFrame
-    """
+    df_class = UpdatedDataFrame(pd.DataFrame(
+        {"my_date": ['2010-01-01', '2010-02-01', '2010-03-01']}))
 
-    def get_date_day(obj):
-        return obj.day
+    df_class.date2year_month_day('my_date')
 
-    def get_date_month(obj):
-        return obj.month
+    df_class.date2year_month_day('my_date')
 
-    def get_date_year(obj):
-        return obj.year
-
-    # Validate the passed parameters
-    if not isinstance(df, pd.DataFrame):
-        # df is not a pandas dataframe - error
-        print(f'passed "list" parameter is not a Python list')
-        return
-
-    if len(df) == 0:
-        # passed dataframe is empty
-        print(f'passed "dataframe" is empty')
-        return
-
-    if len(col_name) == 0:
-        # missing column name
-        print(f'"column name" is missing')
-        return
-
-    if not col_name in df.columns:
-        # column name not found in the passed dataframe
-        print(f'column name "{col_name}" not found in dataframe')
-        return
-
-    # Create a series of data time objects
-    tmp_dt_tm_srs = pd.to_datetime(df[col_name], infer_datetime_format=True)
-
-    # Is there a column name of 'day' in the passed dataframe
-    ts = datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")
-    col_name_day = 'day'
-    if col_name_day in df.columns:
-        # avoid a name collision with the existing 'day' column
-        col_name_day = col_name_day + "_" + ts
-
-    # Is there a column name of 'month' in the passed dataframe
-    col_name_month = 'month'
-    if col_name_month in df.columns:
-        # avoid a name collision with the existing 'month' column
-        col_name_month = col_name_month + "_" + ts
-
-    # Is there a column name of 'year' in the passed dataframe
-    col_name_year = 'year'
-    if col_name_year in df.columns:
-        # avoid a name collision with the existing 'year' column
-        col_name_year = col_name_year + "_" + ts
-
-    # Create dataframe comprised
-    df_tmp = pd.DataFrame({
-        col_name_day: pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_day),
-        col_name_month: pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_month),
-        col_name_year: pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_year)})
-
-    return pd.concat([df, df_tmp], axis=1)
+    print(df_class)
