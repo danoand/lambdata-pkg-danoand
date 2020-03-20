@@ -2,6 +2,7 @@
 import pandas as pd
 import datetime
 
+
 class UpdatedDataFrame(pd.DataFrame):
 
     # list2column is a method on the class that adds a list to the dataframe as a column
@@ -40,7 +41,7 @@ class UpdatedDataFrame(pd.DataFrame):
             new_col_name = new_col_name + "_" + ts
 
         self[new_col_name] = pd.Series(lst)
-    
+
     # date2year_month_day takes a dataframe column and appends a year, month, and day column associate with that date
     def date2year_month_day(self, col_name):
         """
@@ -76,29 +77,33 @@ class UpdatedDataFrame(pd.DataFrame):
             return
 
         # Create a series of data time objects
-        tmp_dt_tm_srs = pd.to_datetime(self[col_name], infer_datetime_format=True)
+        tmp_dt_tm_srs = pd.to_datetime(
+            self[col_name], infer_datetime_format=True)
 
         # Generate column names
-        col_name_day   = col_name + '_day'
+        col_name_day = col_name + '_day'
         col_name_month = col_name + '_month'
-        col_name_year  = col_name + '_year'
+        col_name_year = col_name + '_year'
 
         # Assign new day, month, year columns to the dataframe
-        self[col_name_day]   = pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_day)
-        self[col_name_month] = pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_month)
-        self[col_name_year]  = pd.to_datetime(tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_year)
+        self[col_name_day] = pd.to_datetime(
+            tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_day)
+        self[col_name_month] = pd.to_datetime(
+            tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_month)
+        self[col_name_year] = pd.to_datetime(
+            tmp_dt_tm_srs, infer_datetime_format=True).apply(get_date_year)
+
 
 if __name__ == "__main__":
     # Exercise method 'list2column'
 
     # Create a updated dataframe class
 
-
-    df_class = UpdatedDataFrame(pd.DataFrame({"my_date": ['2010-01-01', '2010-02-01', '2010-03-01']}))
+    df_class = UpdatedDataFrame(pd.DataFrame(
+        {"my_date": ['2010-01-01', '2010-02-01', '2010-03-01']}))
 
     df_class.date2year_month_day('my_date')
 
     df_class.date2year_month_day('my_date')
 
     print(df_class)
-
